@@ -11,7 +11,7 @@
 
 
 ## General Information
-I wanted to build something that A) solidified my back-end knowledge B) learn one or two new technologies, C) actually build something useful to me. This project is the front end portion of a hobby project tracking web app for managing my personal projects. It is my first time using react, satisfying goal B). The full project is in progress and can be found [_here_](https://github.com/thomas-dunlop/hobby-project-manager-back-end). 
+I wanted to A) build something that solidified my back-end knowledge B) learn one or two new technologies, C) actually build something useful to me. This project is the front end portion of a hobby project tracking web app for managing my personal projects. It is my first time using react, satisfying goal B). The full project is in progress and can be found [_here_](https://github.com/thomas-dunlop/hobby-project-manager-back-end). 
 
 
 ## Technologies Used
