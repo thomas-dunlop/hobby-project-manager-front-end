@@ -23,7 +23,7 @@ I wanted to A) build something that solidified my back-end knowledge B) learn on
 ## Features
 This front end allows a user to:
 -	Keep track of projects, including their name, description, related notes, and their associated hobby recipes. 
--	Keep track of hobby recipes, including their name, description, and required materials (paint, glue, etc), and steps. The user can link hobby recipes to multiple projects (for instance if you use the same true metal armor recipe accross multipe armies). 
+-	Keep track of hobby recipes, including their name, description, and required materials (paint, glue, etc), and steps. The user can link hobby recipes to multiple projects (for instance if you use the same true metal armor recipe across multipe armies). 
 - Keep track of material including their name, part number, re-order link, etc. The user can link materials to multiple hobby recipes. The user can also keep track of various lots of materials. 
 
 
