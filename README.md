@@ -64,6 +64,6 @@ Room for improvement:
 - Allow table items to be added inline instead of using a form in a modal. 
 
 To do:
-- Need to add fetch commands to retrieve data from the back end. Current data is spaceholder for demonstration purposes. 
+- Need to add fetch commands to retrieve data from the back end. Current data is placeholder for demonstration purposes. 
 - Need to app POST capability to forms to allow for submitting new data. 
 - Need to add delete capability to delete buttons. 
