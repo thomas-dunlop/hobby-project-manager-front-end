@@ -65,5 +65,5 @@ Room for improvement:
 
 To do:
 - Need to add fetch commands to retrieve data from the back end. Current data is placeholder for demonstration purposes. 
-- Need to app POST capability to forms to allow for submitting new data. 
+- Need to add POST capability to forms to allow for submitting new data. 
 - Need to add delete capability to delete buttons. 
