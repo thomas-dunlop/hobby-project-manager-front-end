@@ -1,10 +1,34 @@
-# Getting Started with Create React App
+# Hobby Tracker App Front End
+> This is the front end for a hobby tracking app that allows users to manage their miniature wargaming related projects. It is part of a complete app (WIP) that can be found [_here_](https://github.com/thomas-dunlop/hobby-project-manager-back-end). 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Table of Contents
+* [General Info](#general-information)
+* [Technologies Used](#technologies-used)
+* [Features](#features)
+* [Setup](#setup)
+* [Project Status](#project-status)
+* [Room for Improvement](#room-for-improvement)
 
-## Available Scripts
 
-In the project directory, you can run:
+## General Information
+I wanted to A) build something that solidified my back-end knowledge B) learn one or two new technologies, C) actually build something useful to me. This project is the front end portion of a hobby project tracking web app for managing my personal projects and fulfilling those goals. It is my first time using react, satisfying goal B). The full project is in progress and can be found [_here_](https://github.com/thomas-dunlop/hobby-project-manager-back-end). 
+
+
+## Technologies Used
+- React - version 17.0.2
+- Font Awesome - version 1.2.36
+- React Bootstrap - version 2.0.0-rc.0
+
+
+## Features
+This front end allows a user to:
+-	Keep track of projects, including their name, description, related notes, and their associated hobby recipes. 
+-	Keep track of hobby recipes, including their name, description, and required materials (paint, glue, etc), and steps. The user can link hobby recipes to multiple projects (for instance if you use the same true metal armor recipe across multipe armies). 
+- Keep track of material including their name, part number, re-order link, etc. The user can link materials to multiple hobby recipes. The user can also keep track of various lots of materials. 
+
+
+## Setup
+To view the front end, simply download the repository. You can then run the following commands in the project directory: 
 
 ### `npm start`
 
@@ -29,42 +53,17 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Project Status
+Project is: _in progress_ 
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Room for Improvement
+Room for improvement:
+- Kanban board to allow for model tracking. Should allow the user to track which models they need, purchased, assembled, painted, and finished. 
+- Allow table items to be added inline instead of using a form in a modal. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+To do:
+- Need to add fetch commands to retrieve data from the back end. Current data is placeholder for demonstration purposes. 
+- Need to add POST capability to forms to allow for submitting new data. 
+- Need to add delete capability to delete buttons. 
