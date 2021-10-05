@@ -4,7 +4,7 @@ const ProjectIcon = (props) => {
     return (
         <div>
             <Button href = {"/Projects/" + props.id} style={{
-                backgroundImage: `url('${props.img}')`,
+                backgroundImage: `url('${props.image}')`,
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover',
                 border: 'none',

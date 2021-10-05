@@ -4,58 +4,71 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
+import { useEffect, useState } from 'react';
+import { useParams } from "react-router";
 
 const ProjectPage = () => {
     //Replace with API call
-    const projectInfo = {
-        name: "Empire of Dust",
-        img: "https://i2.wp.com/dash28.org/wp-content/uploads/2020/01/pasted-image-0-2.png?fit=1307%2C747&ssl=1",
-        description: "Empire of Dust army for Kings of War using models from OnePageRules",
-        notes: "Need to find time to work on this",
-        recipes: [
-            {
-                id: "1",
-                name: "Faded Red Cloth",
-                description: "Fadded red cloth recipe using stippling with a drybrush.",
-                projects: [
-                    {id: '1', name: "Empire of Dust", img: "https://i2.wp.com/dash28.org/wp-content/uploads/2020/01/pasted-image-0-2.png?fit=1307%2C747&ssl=1"},
-                    {id: '2', name: "Late War Wehrmatch", img: "https://cdn.shopify.com/s/files/1/0814/4233/products/12527787_10156646466715257_897851306_n_grande.jpg?v=1548046121"}
-                ],
-                steps: [
-                    {
-                        orderValue: '1', 
-                        description: "Basecoat with galvorback red",
-                        materials: [
-                            {id: '1', name: "Gal Vorbak Red"}
-                        ]
-                    }
-                ]
-            }
-        ]
-    }
-    projectInfo.type = "projectDescription"
+    const [pageData, setPageData] = useState([])
+    const [editData, setEditData] = useState({
+            type: '',
+            data: {}
+        }
+    )
+    const [loaded, setLoaded] = useState(false)
+    const {id}  = useParams();
+
     const newType = {type: "Recipe", directAdd: true} 
+
+    useEffect(() => {
+        //Replace with API variable
+        fetch('http://127.0.0.1:8000/data/project/' + id)
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            } 
+        })
+        .then(data => {
+            setPageData(data[0])
+            setEditData({
+                type: 'Project',
+                data: data[0]
+            })
+            setLoaded(true)
+        })
+        .catch(error => {
+            console.error("Error fetching data", error)
+        })
+        .finally(() =>{
+            setLoaded(true)
+        })
+    }, [])
+
+    if(loaded === false){
+        return <p>Loading</p>
+    }
+    
     return (
         <div>
             <Header />
             <Container>
-                {ProjectCard(projectInfo)}
+                {ProjectCard(pageData.project)}
                 <Card>
                     <Card.Body>
                         <Row>
                             <Col xs = 'auto'>
-                                <Card.Title>{projectInfo.description}</Card.Title>
+                                <Card.Title>{pageData.project.description}</Card.Title>
                             </Col>
                             <Col>
                                 <div class="d-flex justify-content-end">
-                                    {EditButton(projectInfo)}
+                                    <EditButton props={editData}/>
                                 </div>
                             </Col>
                         </Row>
                         <Row>
                             <Col>
                                 <hr></hr>
-                                <Card.Text>{projectInfo.notes}</Card.Text>
+                                <Card.Text>{pageData.project.notes}</Card.Text>
                             </Col>
                         </Row>
                     </Card.Body>
@@ -63,11 +76,11 @@ const ProjectPage = () => {
                 <br></br>
                 <h4>Recipes</h4>
                 <Accordion>
-                    {projectInfo.recipes.map(recipe => RecipeAccordion(recipe))}
+                    {pageData.recipes.map(recipe => {return <RecipeAccordion props={recipe}/>})}
                 </Accordion>
                 <br></br>
                 <Container>
-                    {AddButton(newType)}
+                    <AddButton props={newType}/>
                 </Container>
             </Container>
         </div>

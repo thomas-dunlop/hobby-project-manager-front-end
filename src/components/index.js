@@ -11,11 +11,12 @@ import AddButton from './AddButton';
 import NewProjectForm from './NewProjectForm';
 import NewRecipeForm from './NewRecipeForm';
 import EditRecipeForm from './EditRecipeForm';
-import EditProjectDescriptionForm from './EditProjectDescriptionForm';
+import EditProjectForm from './EditProjectForm';
 import NewStepForm from './NewStepForm';
 import EditMaterialForm from './EditMaterialForm';
 import NewMaterialForm from './NewMaterialForm';
 import NewItemForm from './NewItemForm';
+import AddRecipeForm from './AddRecipeForm';
 
 export {
     Header,
@@ -31,9 +32,10 @@ export {
     NewProjectForm,
     NewRecipeForm,
     EditRecipeForm,
-    EditProjectDescriptionForm,
+    EditProjectForm,
     NewStepForm, 
     EditMaterialForm,
     NewMaterialForm,
     NewItemForm,
+    AddRecipeForm,
 }

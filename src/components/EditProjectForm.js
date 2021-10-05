@@ -1,24 +1,30 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import CSRFToken from './csrftoken';
-import Select from 'react-select';
 import { useState, useEffect } from 'react';
 import getCookie from '../functions/getCookie';
+import Select from 'react-select';
 
-const NewStepForm = (props) => {
+const EditProjectForm = (props) => {
+    const currentRecipes = props.recipes.map(element => {
+        return {'value': element.recipe.id, 'label': element.recipe.name}
+    })
     const [pageData, setPageData] = useState([])
     const [loaded, setLoaded] = useState(false)
     const [value, setValue] = useState({
-        orderValue: '',
-        description: '',
-        materials: [],
-        recipe: props.recipe
+        name: props.project.name,
+        description: props.project.description,
+        notes: props.project.notes, 
+        image: props.project.image,
+        status: 'active',
+        recipes: currentRecipes
     })
+
     const csrftoken = getCookie('csrftoken');
 
     useEffect(() => {
         //Replace with API variable
-        fetch('http://127.0.0.1:8000/data/material')
+        fetch('http://127.0.0.1:8000/data/recipe')
         .then(response => {
             if (response.ok) {
                 return response.json()
@@ -36,18 +42,10 @@ const NewStepForm = (props) => {
         })
     }, [])
 
-    
-    const materialList = pageData.map(element => generateOptGroups(element))
+    const recipeList = pageData.map(element =>  {
+        return {'value': element.recipe.id, 'label': element.recipe.name}
+    })
 
-    function generateOptions(item) {
-        return {'value': item.id, 'label': item.name}
-    }
-    function generateOptGroups(category) {
-        let options = category.materials.map(material => generateOptions(material.material))
-        let optgroup = {'label': category.category, 'options': options}
-        return optgroup
-    }
-    
     const handleChange = (event) => {
         const target = event.target
         const name = target.name
@@ -61,13 +59,13 @@ const NewStepForm = (props) => {
     const handleSelectChange = (selectedOption) => {
         setValue({
             ...value,
-            materials: selectedOption
+            recipes: selectedOption
         })
     }
 
     const handleSubmit = (event) => {
-        fetch('http://127.0.0.1:8000/data/step', {
-            method: 'POST',
+        fetch('http://127.0.0.1:8000/data/project/' + props.project.id, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFTOKEN': csrftoken
@@ -82,10 +80,12 @@ const NewStepForm = (props) => {
         })
 
         setValue({
-            orderValue: '',
-            description: '',
-            materials: [],
-            recipe: props.recipe
+            name: props.name,
+            description: props.description,
+            notes: props.notes, 
+            image: props.image,
+            status: 'active',
+            recipes: currentRecipes
         })
     }
 
@@ -93,29 +93,38 @@ const NewStepForm = (props) => {
         return <p>Loading</p>
     }
 
-    //Replace with API call
     return (
         <div>
+            <CSRFToken />
             <Form onSubmit={handleSubmit}>
-                <CSRFToken />
-                <Form.Group className="mb-3" controlId="orderValue">
-                    <Form.Label>Step Number</Form.Label>
-                    <Form.Control type="number" name="orderValue" value={value.orderValue} onChange = {handleChange} placeholder="Enter Step Number" />
+                <Form.Group className="mb-3" controlId="name">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" name="name" value={value.name} onChange = {handleChange} placeholder="Enter Name" />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="description">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control type="text" name="description" value={value.description} onChange = {handleChange} placeholder="Enter Description" />
+                    <Form.Control type="text" name="description" value={value.description} onChange = {handleChange} placeholder="Enter Description"/>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="materials">
-                    <Form.Label>Materials</Form.Label>
+                <Form.Group className="mb-3" controlId="notes">
+                    <Form.Label>Notes</Form.Label>
+                    <Form.Control as="textarea" type="text" name="notes" value={value.notes} onChange = {handleChange} placeholder="Put your thoughts here!"/>
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="image">
+                    <Form.Label>Link to Image</Form.Label>
+                    <Form.Control type="url"  name="image" value={value.image} onChange = {handleChange} placeholder="Enter URL to Image" />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="projects">
+                    <Form.Label>Recipes</Form.Label>
                     <Select
                         defaultValue={[]}
                         isMulti
-                        value={value.materials}
+                        value={value.recipes}
                         onChange = {handleSelectChange}
-                        options={materialList}
+                        options={recipeList}
                         className="basic-multi-select"
                         classNamePrefix="select"
                     />
@@ -127,4 +136,4 @@ const NewStepForm = (props) => {
     )
 }
 
-export default NewStepForm;
+export default EditProjectForm;

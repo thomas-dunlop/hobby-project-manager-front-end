@@ -1,45 +1,78 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import CSRFToken from './csrftoken';
+import { useState } from 'react';
+import getCookie from '../functions/getCookie';
 
 const NewMaterialForm = (props) => {
-    //Replace with API call
-    const projectList = [
-        {name: "Empire of Dust"},
-        {name: "Late War Wehrmatch"},
-        {name: "Sanguine Fists"}
-    ]
+    const [value, setValue] = useState({
+        name: '',
+        partNumber: '',
+        company: '',
+        link: '',
+        category: props.category
+    })
+    const csrftoken = getCookie('csrftoken');
+
+    const handleChange = (event) => {
+        const target = event.target
+        const name = target.name
+        let data = target.value
+        setValue({
+            ...value,
+            [name]: data
+        })
+    }
+
+    const handleSubmit = (event) => {
+        fetch('http://127.0.0.1:8000/data/material', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFTOKEN': csrftoken
+              },
+            body: JSON.stringify(value)
+        })
+        .then(response => {
+            if (response.ok) {} 
+        })
+        .catch(error => {
+            console.error("Error adding project", error)
+        })
+
+        setValue({
+            name: '',
+            partNumber: '',
+            company: '',
+            link: '',
+            category: props.category
+        })
+    }
 
     return (
         <div> 
-            <Form>
-                <Form.Group className="mb-3" controlId="materialName">
+            <Form onSubmit={handleSubmit}>
+                <CSRFToken />
+                <Form.Group className="mb-3" controlId="name">
                     <Form.Label>Name</Form.Label>
-                    <Form.Control type="text" placeholder="Enter Name"/>
+                    <Form.Control type="text" name="name" value={value.name} onChange = {handleChange} placeholder="Enter Name"/>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="partNumber">
                     <Form.Label>Part Number</Form.Label>
-                    <Form.Control type="text" placeholder="Enter Part Number"/>
+                    <Form.Control type="text" name="partNumber" value={value.partNumber} onChange = {handleChange} placeholder="Enter Part Number"/>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="company">
                     <Form.Label>Company</Form.Label>
-                    <Form.Control type="text" placeholder="Enter Company"/>
+                    <Form.Control type="text" name="company" value={value.company} onChange = {handleChange} placeholder="Enter Company"/>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="link">
                     <Form.Label>Link</Form.Label>
-                    <Form.Control type="url" placeholder="Enter URL to Item"/>
+                    <Form.Control type="url" name="link" value={value.link} onChange = {handleChange} placeholder="Enter URL to Item"/>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="materialProject">
-                    <Form.Label>Projects</Form.Label>
-                    <Form.Select multiple>
-                        {projectList.map(project => {
-                            return <option value={project.name}>{project.name}</option>
-                        })}
-                    </Form.Select>
-                </Form.Group>
                 <Button variant="primary" type="submit">Submit</Button>
             </Form>
         </div>

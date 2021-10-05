@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal'
-import { NewProjectForm, NewRecipeForm, NewStepForm, NewMaterialForm, NewItemForm} from '.';
+import { NewProjectForm, NewRecipeForm, NewStepForm, NewMaterialForm, NewItemForm, AddRecipeForm} from '.';
 
-const AddButton = (props) => {
+const AddButton = ({props}) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);

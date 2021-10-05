@@ -3,20 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal'
-import { EditRecipeForm, EditProjectDescriptionForm, EditMaterialForm } from '.';
+import { EditRecipeForm, EditProjectForm, EditMaterialForm } from '.';
 
-const EditButton = (props) => {
+const EditButton = ({props}) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    
+
     let form
-    if (props.type === "projectDescription") {
-        form = EditProjectDescriptionForm(props)
+    if (props.type === "Project") {
+        form = EditProjectForm(props.data)
     } else if (props.type === "Recipe"){
-        form = EditRecipeForm(props)
+        form = EditRecipeForm(props.data)
     } else if (props.type === "Material") {
-        form = EditMaterialForm(props)
+        form = EditMaterialForm(props.data)
     } else {
         form = "Error, need to build form"
     }
@@ -30,7 +30,7 @@ const EditButton = (props) => {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit {props.name}</Modal.Title>
+                    <Modal.Title>Edit {props.data.name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>{form}</Modal.Body>
             </Modal>          

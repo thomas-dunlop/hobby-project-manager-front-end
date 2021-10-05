@@ -5,47 +5,60 @@ import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { EditButton, DeleteButton, AddButton } from '.';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import getCookie from '../functions/getCookie';
 
 import { ProjectIcon, MaterialIcon} from '.';
 
-const RecipeAccordion = (props) => {
+const RecipeAccordion = ({props}) => {
+    const csrftoken = getCookie('csrftoken');
+    const newType = {type: "Step", recipe: props.recipe.id}
+    const [pageData, setPageData] = useState([])
+    const [loaded, setLoaded] = useState(false)
     //Replace with API call
-    const materialsList = [
-        { 
-            name: 'Paint',
-            materials: [
-                {id: '1', name: 'Gal Vorbak Red'},
-                {id: '2', name: 'Celestra Grey'},
-                {id: '4', name: 'Ulthuan Grey'},
-                {id: '3', name: 'Military Green'},
-            ]
-        },
-        { 
-            name: 'Glue',
-            materials: [
-                {id: '5', name: 'Insta-Cure+™ Super Glue, CA'},
-            ]
-        },
-    ]
 
-    function generateOptions(selectedArray, item) {
-        if (selectedArray.some(element => element.id === item.id)) {
-            return <option selected value={item.name}>{item.name}</option>
-        } else {
-            return <option value={item.name}>{item.name}</option>
-        }
+    useEffect(() => {
+        //Replace with API variable
+        fetch('http://127.0.0.1:8000/data/material')
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            } 
+        })
+        .then(data => {
+            setPageData(data)
+            setLoaded(true)
+        })
+        .catch(error => {
+            console.error("Error fetching data", error)
+        })
+        .finally(() =>{
+            setLoaded(true)
+        })
+    }, [])
+    
+    const materialList = pageData.map(element => generateOptGroups(element))
+
+    function generateOptions(item) {
+        return {'value': item.id, 'label': item.name}
     }
-    function generateOptGroups(selectedArray, category) {
-        let options = category.materials.map(material => generateOptions(selectedArray, material))
-        let optgroup = <optgroup label={category.name}>{options}</optgroup>
+    function generateOptGroups(category) {
+        let options = category.materials.map(material => generateOptions(material.material))
+        let optgroup = {'label': category.category, 'options': options}
         return optgroup
     }
 
     //Edit Table Logic
+    const getCurrentMaterials = (currentMaterials) => {
+        const modifiedMaterials = currentMaterials.map(element => {
+            return {'value': element.id, 'label': element.name}})
+        return modifiedMaterials
+    }
+
     const [inEditMode, setInEditMode] = useState({status: false, rowKey: null});
     const [stepValues, setStepValues] = useState({orderValue: null, description: null, materials: []});
     
@@ -64,24 +77,43 @@ const RecipeAccordion = (props) => {
         updateInventory ({id, newValues})
     }
 
-    //Replace with call to API
-    const updateInventory = ({id, newValues}) => {
-        let index = props.steps.findIndex(element => element.id === id)
-        props.steps[index].description = newValues.description;
-        props.steps[index].orderValue = newValues.orderValue;
-        props.steps[index].materials = newValues.materials
-        onCancel();
+    const handleSelectChange = (selectedOption) => {
+        setStepValues({
+            ...stepValues,
+            materials: selectedOption
+        })
     }
 
-    props.type = "Recipe";
+    //Replace with call to API
+    const updateInventory = ({id, newValues}) => {
+        fetch('http://127.0.0.1:8000/data/step/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFTOKEN': csrftoken
+              },
+            body: JSON.stringify(newValues)
+        })
+        .then(response => {
+            if (response.ok) {window.location.reload()} 
+        })
+        .catch(error => {
+            console.error("Error adding project", error)
+        })
+
+        onCancel();
+
+    }
+
+    const editData = {type: "Recipe", data: props}
     return (
         <div>
-            <AccordionItem  eventKey = {props.id}> 
+            <AccordionItem  eventKey = {props.recipe.id}> 
                 <AccordionHeader>
                     <Container>
                         <Row>
                             <Col>
-                               {props.name}
+                               {props.recipe.name}
                             </Col>
                             <Col>
                                 <div class="d-flex justify-content-end">
@@ -90,15 +122,15 @@ const RecipeAccordion = (props) => {
                             </Col>
                             <Col xs="auto">
                                 <div class="d-flex justify-content-end">
-                                    {EditButton(props)}
-                                    {DeleteButton(props)}
+                                    <EditButton props={editData}/>
+                                    {DeleteButton({target: 'recipe', id: props.recipe.id})}
                                 </div>
                             </Col>
                         </Row>
                     </Container>
                 </AccordionHeader>
                 <AccordionBody>
-                    <p>{props.description}</p>
+                    <p>{props.recipe.description}</p>
                     <hr></hr>
                     <table class='recipeStepTable'>
                         <tr>
@@ -107,38 +139,42 @@ const RecipeAccordion = (props) => {
                             <th>Materials</th>
                         </tr>
                         {props.steps.map(step => (
-                            <tr key={step.id}>
+                            <tr key={step.step.id}>
                                 <td>
                                     {
-                                        inEditMode.status && inEditMode.rowKey === step.id ? (
+                                        inEditMode.status && inEditMode.rowKey === step.step.id ? (
                                             <input value={stepValues.orderValue}
-                                            onChange={(event) => setStepValues({orderValue: event.target.value})}
+                                            onChange={(event) => setStepValues({...stepValues, orderValue: event.target.value})}
                                             />
                                         ) : (
-                                            step.orderValue
+                                            step.step.orderValue
                                         )
                                     }
                                 </td>
                                 <td>
                                     {
-                                        inEditMode.status && inEditMode.rowKey === step.id ? (
+                                        inEditMode.status && inEditMode.rowKey === step.step.id ? (
                                             <input value={stepValues.description}
-                                               onChange={(event) => setStepValues({description: event.target.value})}
-                                               />
+                                               onChange={(event) => setStepValues({...stepValues, description: event.target.value})}
+                                            />
                                         ) : (
-                                            step.description
+                                            step.step.description
                                         )
                                     }
                                 </td>
                                 <td>
                                     <div class="d-flex flex-row">
                                         {
-                                            inEditMode.status && inEditMode.rowKey === step.id ? (
-                                                <select multiple
-                                                onChange={(event) => setStepValues({materials: event.target.value})}
-                                                >
-                                                    {materialsList.map(category => (generateOptGroups(step.materials, category)))}
-                                                </select>
+                                            inEditMode.status && inEditMode.rowKey === step.step.id ? (
+                                                <Select
+                                                    defaultValue={[]}
+                                                    isMulti
+                                                    value={stepValues.materials}
+                                                    onChange = {handleSelectChange}
+                                                    options={materialList}
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                            />
                                             ) : (
                                                 step.materials.map(material => (MaterialIcon(material)))
                                             )
@@ -148,11 +184,11 @@ const RecipeAccordion = (props) => {
                                 <td>
                                     <div class="d-flex justify-content-end">
                                     {
-                                        inEditMode.status && inEditMode.rowKey === step.id ? (
+                                        inEditMode.status && inEditMode.rowKey === step.step.id ? (
                                             <React.Fragment>
                                                 <Button 
                                                     variant = "success" 
-                                                    onClick={() => onSave({id: step.id, newValues: {
+                                                    onClick={() => onSave({id: step.step.id, newValues: {
                                                         orderValue: stepValues.orderValue, 
                                                         description: stepValues.description, 
                                                         materials: stepValues.materials
@@ -168,20 +204,21 @@ const RecipeAccordion = (props) => {
                                         ) : (
                                             
                                                 <Button id="iconButton"  onClick={
-                                                    () => onEdit({id: step.id, currentValues: {orderValue: step.orderValue, description: step.description, materials: step.materials}})
+                                                    () => onEdit({id: step.step.id, currentValues: {orderValue: step.step.orderValue, description: step.step.description, materials: getCurrentMaterials(step.materials)}})
                                                 }>
                                                     <FontAwesomeIcon icon={faEdit}/>
                                                 </Button> 
                                             
                                         )
                                     }
+                                    {DeleteButton({target: 'step', id: step.step.id})}
                                     </div>
                                 </td>
                             </tr>
                         ))}
                     </table>
                     <div  class="d-flex justify-content-center"> 
-                        {AddButton({type: "Step"})}
+                        <AddButton props={newType}/>
                     </div>
                 </AccordionBody>
             </AccordionItem>

@@ -10,8 +10,12 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import React, {useState} from 'react';
+import getCookie from '../functions/getCookie';
 
-const InventoryAccordionItem = (props) => {
+const InventoryAccordionItem = ({props}) => {
+    const newType = {type: "Item", material: props.material.id}
+    const editData = {type: "Material", data: props}
+    const csrftoken = getCookie('csrftoken');
     //Edit Table Logic
     const [inEditMode, setInEditMode] = useState({status: false, rowKey: null});
     const [itemValues, setItemValues] = useState({lotNumber: null, expiryDate: null});
@@ -33,32 +37,43 @@ const InventoryAccordionItem = (props) => {
 
     //Replace with call to API
     const updateInventory = ({id, newValues}) => {
-        let index = props.items.findIndex(element => element.id === id)
-        props.items[index].lotNumber = newValues.lotNumber;
-        props.items[index].expiryDate = newValues.expiryDate
+        fetch('http://127.0.0.1:8000/data/inventory/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFTOKEN': csrftoken
+              },
+            body: JSON.stringify(newValues)
+        })
+        .then(response => {
+            if (response.ok) {window.location.reload()} 
+        })
+        .catch(error => {
+            console.error("Error adding project", error)
+        })
+
         onCancel();
+
     }
 
-    props.type = "Material"
-
     return (
-        <AccordionItem eventKey = {props.id}>
+        <AccordionItem eventKey = {props.material.id}>
             <AccordionHeader>
                 <Container>
                     <Row>
-                        <Col xs={2}><Badge bg="secondary">{props.items.length}</Badge> {props.name}</Col>
-                        <Col xs={2}>{props.partNumber}</Col>
-                        <Col xs={2}>{props.company}</Col>
-                        <Col xs={1}><a href={props.link}>Link</a></Col>
-                        <Col>
+                        <Col xs={2}><Badge bg="secondary">{props.inventory.length}</Badge> {props.material.name}</Col>
+                        <Col xs={2}>{props.material.partNumber}</Col>
+                        <Col xs={2}>{props.material.company}</Col>
+                        <Col xs={1}><a href={props.material.link}>Link</a></Col>
+                        {<Col>
                             <div class="d-flex flex-row">
                                 {props.projects.map(project => (ProjectIcon(project)))}
                             </div>
-                        </Col>
+                        </Col>}
                         <Col xs={1}>
                             <div class="d-flex flex-row">
-                                {EditButton(props)}
-                                {DeleteButton(props)}
+                                <EditButton props={editData}/>
+                                {DeleteButton({target: 'material', id: props.material.id})}
                             </div>
                         </Col>
                     </Row>
@@ -70,13 +85,13 @@ const InventoryAccordionItem = (props) => {
                         <th>Lot Number</th>
                         <th>Expiry Date (YYYY/MM/DD)</th>
                     </tr>
-                    {props.items.map(item => (
+                    {props.inventory.map(item => (
                         <tr key={item.id}>
                             <td>
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
                                         <input value={itemValues.lotNumber}
-                                        onChange={(event) => setItemValues({lotNumber: event.target.value})}
+                                        onChange={(event) => setItemValues({...itemValues, lotNumber: event.target.value})}
                                         />
                                     ) : (
                                         item.lotNumber
@@ -87,7 +102,8 @@ const InventoryAccordionItem = (props) => {
                                 {
                                     inEditMode.status && inEditMode.rowKey === item.id ? (
                                         <input value={itemValues.expiryDate}
-                                        onChange={(event) => setItemValues({expiryDate: event.target.value})}
+                                        onChange={(event) => setItemValues({...itemValues, expiryDate: event.target.value})}
+                                        type='date'
                                         />
                                     ) : (
                                         item.expiryDate
@@ -118,7 +134,7 @@ const InventoryAccordionItem = (props) => {
                                             
                                         )
                                     }
-                                    {DeleteButton(item)}
+                                    {DeleteButton({target: 'inventory', id: item.id})}
                                     </div>
                                 </div>
                             </td>
@@ -126,7 +142,7 @@ const InventoryAccordionItem = (props) => {
                     ))}
                 </table>
                 <div  class="d-flex justify-content-center"> 
-                    {AddButton({type: "Item"})}
+                    <AddButton props={newType} />
                 </div>
             </AccordionBody>
         </AccordionItem>

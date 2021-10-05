@@ -1,26 +1,23 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import CSRFToken from './csrftoken';
-import Select from 'react-select';
+
 import { useState, useEffect } from 'react';
+import Select from 'react-select';
 import getCookie from '../functions/getCookie';
 
-const EditRecipeForm = (props) => {
-    const currentProjects = props.projects.map(element => {
-        return {'value': element.id, 'label': element.name}
-    })
+const AddRecipeForm = (props) => {
+
     const [pageData, setPageData] = useState([])
     const [loaded, setLoaded] = useState(false)
     const [value, setValue] = useState({
-        name: props.recipe.name,
-        description: props.recipe.description,
-        projects: currentProjects
+        recipes: []
     })
     const csrftoken = getCookie('csrftoken');
 
     useEffect(() => {
         //Replace with API variable
-        fetch('http://127.0.0.1:8000/data/project')
+        fetch('http://127.0.0.1:8000/data/recipe')
         .then(response => {
             if (response.ok) {
                 return response.json()
@@ -39,30 +36,20 @@ const EditRecipeForm = (props) => {
     }, [])
 
     
-    const projectList = pageData.map(element =>  {
-        return {'value': element.id, 'label': element.name}
+    const recipeList = pageData.map(element =>  {
+        return {'value': element.recipe.id, 'label': element.recipe.name}
     })
-    
-    const handleChange = (event) => {
-        const target = event.target
-        const name = target.name
-        let data = target.value
-        setValue({
-            ...value,
-            [name]: data
-        })
-    }
 
     const handleSelectChange = (selectedOption) => {
         setValue({
             ...value,
-            projects: selectedOption
+            recipes: selectedOption
         })
     }
 
     const handleSubmit = (event) => {
-        fetch('http://127.0.0.1:8000/data/recipe/' + props.recipe.id, {
-            method: 'PUT',
+        fetch('http://127.0.0.1:8000/data/project', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFTOKEN': csrftoken
@@ -77,10 +64,7 @@ const EditRecipeForm = (props) => {
         })
 
         setValue({
-            id: props.recipe.id,
-            name: props.recipe.name,
-            description: props.recipe.description,
-            projects: currentProjects
+            recipes: []
         })
     }
 
@@ -89,35 +73,31 @@ const EditRecipeForm = (props) => {
     }
 
     return (
-        <div>
-            <Form onSubmit={handleSubmit}>
-                <CSRFToken />
-                <Form.Group className="mb-3" controlId="name">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control type="text" name="name" value={value.name} onChange = {handleChange} placeholder="Enter Name" />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="description">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control type="text" name="description" value={value.description} onChange = {handleChange} placeholder="Enter Description" />
-                </Form.Group>
-
+        <div >
+        <h5>Add Existing Recipe</h5>
+        <Form onSubmit={handleSubmit}>
+            <CSRFToken />
+            <Form.Group className="mb-3" controlId="projectRecipes">
                 <Form.Group className="mb-3" controlId="projects">
-                    <Form.Label>Projects</Form.Label>
                     <Select
                         defaultValue={[]}
                         isMulti
                         value={value.projects}
                         onChange = {handleSelectChange}
-                        options={projectList}
+                        options={recipeList}
                         className="basic-multi-select"
                         classNamePrefix="select"
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit">Submit</Button>
-            </Form>
+            </Form.Group>
+            <Button variant="primary" type="submit">Submit</Button>
+        </Form>
+        <hr></hr>
+        <p class="d-flex justify-content-center">or</p>
+        <hr></hr>
+        <h5>Create New Recipe</h5>
         </div>
     )
 }
 
-export default EditRecipeForm;
+export default AddRecipeForm;
