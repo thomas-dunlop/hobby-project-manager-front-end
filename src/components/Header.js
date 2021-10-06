@@ -1,10 +1,62 @@
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
+import getCookie from '../functions/getCookie';
+import { useState, useEffect } from 'react';
 
 const Header = () => {
+    const [pageData, setPageData] = useState(null);
+    const [loaded, setLoaded] = useState(false);
+    const csrftoken = getCookie('csrftoken');
+    const handleSubmit = (event) => {
+        fetch('http://127.0.0.1:8000/account/logout/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFTOKEN': csrftoken
+              },
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            } 
+        }).then(data => {
+            window.location.href = data["url"]
+        })
+        .catch(error => {
+            console.error("Error adding project", error)
+        })
+
+        event.preventDefault()
+    }
+
+    useEffect(() => {
+        //Replace with API variable
+        fetch('http://127.0.0.1:8000/data/userinfo')
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            } 
+        })
+        .then(data => {
+            setPageData(data)
+            setLoaded(true)
+        })
+        .catch(error => {
+            console.error("Error fetching data", error)
+        })
+        .finally(() =>{
+            setLoaded(true)
+        })
+    }, [])
+
+    if(loaded === false){
+        return <p>Loading</p>
+    }
+
     return (
-        <Navbar /*fixed="top"*/>
+        <Navbar>
             <Container fluid>
                 <Navbar.Brand href='/'>Hobby Planner</Navbar.Brand>
                 <Nav>
@@ -13,9 +65,15 @@ const Header = () => {
                     <Nav.Link class ='navItems' href='/Inventory'>Inventory</Nav.Link>
                 </Nav>
                 <Navbar.Collapse className="justify-content-end">
-                    <Navbar.Text>
-                        Signed in as: <a href="/login">Thomas Dunlop</a>
-                    </Navbar.Text>
+                    <div>
+                        <Navbar.Text>
+                            Signed in as: {pageData.username}
+                        </Navbar.Text>
+                        <Button onClick={handleSubmit} style={{
+                            marginLeft: '5px',
+                        }}>Logout</Button>
+                    </div>
+                    
                 </Navbar.Collapse>
             </Container>
         </Navbar>

@@ -1,14 +1,14 @@
-import {LoginForm} from '../components';
+import {CreateAccountForm} from '../components';
 import Container from 'react-bootstrap/Container';
 
-const Login = () => {
+const CreateAccount = () => {
     return (
         <div >
             <Container>
-                <LoginForm />
+                <CreateAccountForm />
             </Container>
         </div>
     )
 }
 
-export default Login;
+export default CreateAccount;

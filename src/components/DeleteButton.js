@@ -21,7 +21,9 @@ const DeleteButton = (props) => {
         .catch(error => {
             console.error("Error adding project", error)
         })
+        event.preventDefault()
     }
+
     return (
         <div>
             <Button id="iconButton" onClick = {handleSubmit}>

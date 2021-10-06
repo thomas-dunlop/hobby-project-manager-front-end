@@ -34,7 +34,7 @@ const NewMaterialForm = (props) => {
             body: JSON.stringify(value)
         })
         .then(response => {
-            if (response.ok) {} 
+            if (response.ok) {window.location.reload()} 
         })
         .catch(error => {
             console.error("Error adding project", error)
@@ -47,6 +47,8 @@ const NewMaterialForm = (props) => {
             link: '',
             category: props.category
         })
+
+        event.preventDefault()
     }
 
     return (

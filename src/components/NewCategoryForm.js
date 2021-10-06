@@ -4,13 +4,13 @@ import CSRFToken from './csrftoken';
 import { useState } from 'react';
 import getCookie from '../functions/getCookie';
 
-const EditMaterialForm = (props) => {
+const NewCategoryForm = (props) => {
     const [value, setValue] = useState({
-        name: props.material.name,
-        partNumber: props.material.partNumber,
-        company: props.material.company,
-        link: props.material.link,
-        category: props.category
+        name: '',
+        partNumber: '',
+        company: '',
+        link: '',
+        category: '',
     })
     const csrftoken = getCookie('csrftoken');
 
@@ -25,8 +25,8 @@ const EditMaterialForm = (props) => {
     }
 
     const handleSubmit = (event) => {
-        fetch('http://127.0.0.1:8000/data/material/' + props.material.id, {
-            method: 'PUT',
+        fetch('http://127.0.0.1:8000/data/material', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFTOKEN': csrftoken
@@ -34,28 +34,32 @@ const EditMaterialForm = (props) => {
             body: JSON.stringify(value)
         })
         .then(response => {
-            if (response.ok) {
-                window.location.reload()
-            } 
+            if (response.ok) {window.location.reload()} 
         })
         .catch(error => {
             console.error("Error adding project", error)
         })
 
         setValue({
-            name: props.material.name,
-            partNumber: props.material.partNumber,
-            company: props.material.company,
-            link: props.material.link,
-            category: props.category
+            name: '',
+            partNumber: '',
+            company: '',
+            link: '',
+            category: '',
         })
+
         event.preventDefault()
     }
-    
+
     return (
-        <div>
+        <div> 
             <Form onSubmit={handleSubmit}>
                 <CSRFToken />
+                <Form.Group className="mb-3" controlId="category">
+                    <Form.Label>Category</Form.Label>
+                    <Form.Control type="text" name="category" value={value.category} onChange = {handleChange} placeholder="Enter Item Category"/>
+                </Form.Group>
+
                 <Form.Group className="mb-3" controlId="name">
                     <Form.Label>Name</Form.Label>
                     <Form.Control type="text" name="name" value={value.name} onChange = {handleChange} placeholder="Enter Name"/>
@@ -82,4 +86,4 @@ const EditMaterialForm = (props) => {
     )
 }
 
-export default EditMaterialForm;
+export default NewCategoryForm;

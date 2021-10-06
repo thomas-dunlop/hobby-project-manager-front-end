@@ -67,7 +67,7 @@ const NewRecipeForm = (props) => {
             body: JSON.stringify(value)
         })
         .then(response => {
-            if (response.ok) {} 
+            if (response.ok) {window.location.reload()} 
         })
         .catch(error => {
             console.error("Error adding project", error)
@@ -78,6 +78,8 @@ const NewRecipeForm = (props) => {
             description: '',
             projects: []
         })
+
+        event.preventDefault()
     }
 
     if(loaded === false){

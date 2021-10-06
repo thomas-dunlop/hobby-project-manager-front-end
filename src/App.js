@@ -10,7 +10,8 @@ import {
   Recipes,
   Inventory,
   Login,
-  ProjectPage
+  ProjectPage,
+  CreateAccount
 } from './pages';
 
 
@@ -30,17 +31,23 @@ function App() {
       <body>
         <Router>
           <Switch> 
-            <Route path = "/Recipes">
+            <Route path = "/recipes">
               <Recipes />
             </Route>
-            <Route path = "/Login">
+            <Route path = "/login">
               <Login />
             </Route>
-            <Route path = "/Inventory">
+            <Route path = "/inventory">
               <Inventory />
             </Route>
-            <Route path = "/Projects/:id">
+            <Route path = "/projects/:id">
               <ProjectPage />
+            </Route>
+            <Route path = "/login">
+              <Login />
+            </Route>
+            <Route path = "/create-account">
+              <CreateAccount />
             </Route>
             <Route path = "/">
               <HomePage />

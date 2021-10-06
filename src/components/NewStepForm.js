@@ -75,7 +75,7 @@ const NewStepForm = (props) => {
             body: JSON.stringify(value)
         })
         .then(response => {
-            if (response.ok) {} 
+            if (response.ok) {window.location.reload()} 
         })
         .catch(error => {
             console.error("Error adding project", error)
@@ -87,6 +87,8 @@ const NewStepForm = (props) => {
             materials: [],
             recipe: props.recipe
         })
+
+        event.preventDefault()
     }
 
     if(loaded === false){

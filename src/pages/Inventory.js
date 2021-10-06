@@ -1,11 +1,12 @@
 import Container from 'react-bootstrap/Container';
 import {Header} from '../components';
-import { InventoryCategoryAccordion } from '../components';
+import { InventoryCategoryAccordion, AddButton} from '../components';
 import { useEffect, useState } from 'react';
 
 const Inventory = () => {
     const [pageData, setPageData] = useState([])
     const [loaded, setLoaded] = useState(false)
+    const newType = {type: "Category"}
     
     useEffect(() => {
         //Replace with API variable
@@ -36,6 +37,10 @@ const Inventory = () => {
             <Header />
             <Container>
                 {pageData.map(category => (InventoryCategoryAccordion(category)))}
+            </Container>
+            <br></br>
+            <Container>
+                <AddButton props={newType} />
             </Container>
         </div>
     )

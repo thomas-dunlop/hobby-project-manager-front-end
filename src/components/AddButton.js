@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal'
-import { NewProjectForm, NewRecipeForm, NewStepForm, NewMaterialForm, NewItemForm, AddRecipeForm} from '.';
+import { NewProjectForm, NewRecipeForm, NewStepForm, NewMaterialForm, NewItemForm, NewCategoryForm} from '.';
 
 const AddButton = ({props}) => {
     const [show, setShow] = useState(false);
@@ -31,6 +31,8 @@ const AddButton = ({props}) => {
         form = NewItemForm(props)
     } else if (props.type === "Material") {
         form = NewMaterialForm(props)
+    } else if (props.type === "Category") {
+        form = NewCategoryForm(props)
     } else {
         form = "Error, need to build form"
     }

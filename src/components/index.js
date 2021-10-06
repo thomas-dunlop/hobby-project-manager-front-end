@@ -17,6 +17,9 @@ import EditMaterialForm from './EditMaterialForm';
 import NewMaterialForm from './NewMaterialForm';
 import NewItemForm from './NewItemForm';
 import AddRecipeForm from './AddRecipeForm';
+import LoginForm from './LoginForm';
+import CreateAccountForm from './CreateAccountForm';
+import NewCategoryForm from './NewCategoryForm';
 
 export {
     Header,
@@ -38,4 +41,7 @@ export {
     NewMaterialForm,
     NewItemForm,
     AddRecipeForm,
+    LoginForm,
+    CreateAccountForm,
+    NewCategoryForm,
 }
