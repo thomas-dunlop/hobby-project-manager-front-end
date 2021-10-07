@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import React, {useState} from 'react';
 import getCookie from '../functions/getCookie';
+import URL from '../constants';
 
 const InventoryAccordionItem = ({props}) => {
     const newType = {type: "Item", material: props.material.id}
@@ -37,7 +38,7 @@ const InventoryAccordionItem = ({props}) => {
 
     //Replace with call to API
     const updateInventory = ({id, newValues}) => {
-        fetch('http://127.0.0.1:8000/data/inventory/' + id, {
+        fetch(URL + 'data/inventory/' + id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

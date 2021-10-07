@@ -4,13 +4,14 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import getCookie from '../functions/getCookie';
 import { useState, useEffect } from 'react';
+import URL from '../constants';
 
 const Header = () => {
     const [pageData, setPageData] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const csrftoken = getCookie('csrftoken');
     const handleSubmit = (event) => {
-        fetch('http://127.0.0.1:8000/account/logout/', {
+        fetch(URL + 'account/logout/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,7 +34,7 @@ const Header = () => {
 
     useEffect(() => {
         //Replace with API variable
-        fetch('http://127.0.0.1:8000/data/userinfo')
+        fetch(URL + 'data/userinfo')
         .then(response => {
             if (response.ok) {
                 return response.json()

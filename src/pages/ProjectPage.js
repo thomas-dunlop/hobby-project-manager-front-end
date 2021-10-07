@@ -6,9 +6,9 @@ import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
 import { useParams } from "react-router";
+import URL from '../constants';
 
 const ProjectPage = () => {
-    //Replace with API call
     const [pageData, setPageData] = useState([])
     const [editData, setEditData] = useState({
             type: '',
@@ -21,8 +21,7 @@ const ProjectPage = () => {
     const newType = {type: "Recipe", directAdd: true} 
 
     useEffect(() => {
-        //Replace with API variable
-        fetch('http://127.0.0.1:8000/data/project/' + id)
+        fetch(URL + 'data/project/' + id)
         .then(response => {
             if (response.ok) {
                 return response.json()

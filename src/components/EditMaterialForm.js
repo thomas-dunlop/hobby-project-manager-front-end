@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import CSRFToken from './csrftoken';
 import { useState } from 'react';
 import getCookie from '../functions/getCookie';
+import URL from '../constants';
 
 const EditMaterialForm = (props) => {
     const [value, setValue] = useState({
@@ -25,7 +26,7 @@ const EditMaterialForm = (props) => {
     }
 
     const handleSubmit = (event) => {
-        fetch('http://127.0.0.1:8000/data/material/' + props.material.id, {
+        fetch(URL + 'data/material/' + props.material.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

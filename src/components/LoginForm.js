@@ -4,6 +4,7 @@ import { Card } from 'react-bootstrap';
 import CSRFToken from './csrftoken';
 import { useState } from 'react';
 import getCookie from '../functions/getCookie';
+import URL from '../constants';
 
 const LoginForm = (props) => {
     const [value, setValue] = useState({
@@ -23,7 +24,7 @@ const LoginForm = (props) => {
     }
 
     const handleSubmit = (event) => {
-        fetch('http://127.0.0.1:8000/account/login/', {
+        fetch(URL + 'account/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

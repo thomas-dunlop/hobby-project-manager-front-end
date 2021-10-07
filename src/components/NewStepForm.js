@@ -4,6 +4,7 @@ import CSRFToken from './csrftoken';
 import Select from 'react-select';
 import { useState, useEffect } from 'react';
 import getCookie from '../functions/getCookie';
+import URL from '../constants';
 
 const NewStepForm = (props) => {
     const [pageData, setPageData] = useState([])
@@ -17,8 +18,7 @@ const NewStepForm = (props) => {
     const csrftoken = getCookie('csrftoken');
 
     useEffect(() => {
-        //Replace with API variable
-        fetch('http://127.0.0.1:8000/data/material')
+        fetch(URL + 'data/material')
         .then(response => {
             if (response.ok) {
                 return response.json()
@@ -66,7 +66,7 @@ const NewStepForm = (props) => {
     }
 
     const handleSubmit = (event) => {
-        fetch('http://127.0.0.1:8000/data/step', {
+        fetch(URL + 'data/step', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -95,7 +95,6 @@ const NewStepForm = (props) => {
         return <p>Loading</p>
     }
 
-    //Replace with API call
     return (
         <div>
             <Form onSubmit={handleSubmit}>

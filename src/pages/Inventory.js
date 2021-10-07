@@ -2,6 +2,7 @@ import Container from 'react-bootstrap/Container';
 import {Header} from '../components';
 import { InventoryCategoryAccordion, AddButton} from '../components';
 import { useEffect, useState } from 'react';
+import URL from '../constants';
 
 const Inventory = () => {
     const [pageData, setPageData] = useState([])
@@ -9,8 +10,7 @@ const Inventory = () => {
     const newType = {type: "Category"}
     
     useEffect(() => {
-        //Replace with API variable
-        fetch('http://127.0.0.1:8000/data/material')
+        fetch(URL + 'data/material')
         .then(response => {
             if (response.ok) {
                 return response.json()

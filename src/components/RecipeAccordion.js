@@ -11,6 +11,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { EditButton, DeleteButton, AddButton } from '.';
 import React, {useState, useEffect} from 'react';
 import getCookie from '../functions/getCookie';
+import URL from '../constants';
 
 import { ProjectIcon, MaterialIcon} from '.';
 
@@ -19,11 +20,9 @@ const RecipeAccordion = ({props}) => {
     const newType = {type: "Step", recipe: props.recipe.id}
     const [pageData, setPageData] = useState([])
     const [loaded, setLoaded] = useState(false)
-    //Replace with API call
 
     useEffect(() => {
-        //Replace with API variable
-        fetch('http://127.0.0.1:8000/data/material')
+        fetch(URL + 'data/material')
         .then(response => {
             if (response.ok) {
                 return response.json()
@@ -84,9 +83,8 @@ const RecipeAccordion = ({props}) => {
         })
     }
 
-    //Replace with call to API
     const updateInventory = ({id, newValues}) => {
-        fetch('http://127.0.0.1:8000/data/step/' + id, {
+        fetch(URL + 'data/step/' + id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -103,6 +101,10 @@ const RecipeAccordion = ({props}) => {
 
         onCancel();
 
+    }
+
+    if(loaded === false){
+        return <p>Loading</p>
     }
 
     const editData = {type: "Recipe", data: props}

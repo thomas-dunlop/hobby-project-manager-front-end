@@ -1,7 +1,7 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import CSRFToken from './csrftoken';
-
+import URL from '../constants';
 import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import getCookie from '../functions/getCookie';
@@ -17,7 +17,7 @@ const AddRecipeForm = (props) => {
 
     useEffect(() => {
         //Replace with API variable
-        fetch('http://127.0.0.1:8000/data/recipe')
+        fetch(URL + 'data/recipe')
         .then(response => {
             if (response.ok) {
                 return response.json()
@@ -48,7 +48,7 @@ const AddRecipeForm = (props) => {
     }
 
     const handleSubmit = (event) => {
-        fetch('http://127.0.0.1:8000/data/project', {
+        fetch(URL + 'data/project', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

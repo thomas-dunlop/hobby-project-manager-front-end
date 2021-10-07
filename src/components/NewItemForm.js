@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import CSRFToken from './csrftoken';
 import { useState } from 'react';
 import getCookie from '../functions/getCookie';
+import URL from '../constants';
 
 const NewItemForm = (props) => {
     const [value, setValue] = useState({
@@ -23,7 +24,7 @@ const NewItemForm = (props) => {
     }
 
     const handleSubmit = (event) => {
-        fetch('http://127.0.0.1:8000/data/inventory', {
+        fetch(URL + 'data/inventory', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Accordion from 'react-bootstrap/Accordion';
 import { AddButton } from '../components';
 import { useEffect, useState } from 'react';
+import URL from '../constants';
 
 const Recipes = () => {
     const [pageData, setPageData] = useState([])
@@ -10,8 +11,7 @@ const Recipes = () => {
     const newType = {type: "Recipe", directAdd: false} 
 
     useEffect(() => {
-        //Replace with API variable
-        fetch('http://127.0.0.1:8000/data/recipe')
+        fetch(URL + 'data/recipe')
         .then(response => {
             if (response.ok) {
                 return response.json()

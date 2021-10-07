@@ -4,6 +4,7 @@ import CSRFToken from './csrftoken';
 import Select from 'react-select';
 import { useState, useEffect } from 'react';
 import getCookie from '../functions/getCookie';
+import URL from '../constants';
 
 const EditRecipeForm = (props) => {
     const currentProjects = props.projects.map(element => {
@@ -20,7 +21,7 @@ const EditRecipeForm = (props) => {
 
     useEffect(() => {
         //Replace with API variable
-        fetch('http://127.0.0.1:8000/data/project')
+        fetch(URL + 'data/project')
         .then(response => {
             if (response.ok) {
                 return response.json()
@@ -61,7 +62,7 @@ const EditRecipeForm = (props) => {
     }
 
     const handleSubmit = (event) => {
-        fetch('http://127.0.0.1:8000/data/recipe/' + props.recipe.id, {
+        fetch(URL + 'data/recipe/' + props.recipe.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
