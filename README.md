@@ -27,7 +27,7 @@ This front end allows a user to:
 
 
 ## Setup
-Because of the fetch requests, you cannot run this front end without a server running the back end. Go to the full projec [_here_](https://github.com/thomas-dunlop/hobbyapp) to see it in action. 
+Because of the fetch requests, you cannot run this front end without a server running the back end. Go to the full project [_here_](https://github.com/thomas-dunlop/hobbyapp) to see it in action. 
 
 
 ## Project Status
